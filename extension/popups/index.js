@@ -50,7 +50,18 @@ submitButton.addEventListener("click", async () => {
   }
 
   textIsValid.style.display = "none";
-  console.log(text);
+
+  try {
+    const data = await fetch("http://localhost:3000/text", {
+      method: "POST",
+      body: JSON.stringify(text),
+    });
+    const result = await data.json();
+
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 function enablePagePicker() {
