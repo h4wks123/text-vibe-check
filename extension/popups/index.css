@@ -70,11 +70,33 @@
   background: #16181c;
   font: inherit;
   line-height: 1.4;
-  resize: vertical;
+  resize: none;
+  scrollbar-color: #71767b #16181c;
+  scrollbar-width: thin;
 }
 
 #text-checker__selected-text::placeholder {
   color: #71767b;
+}
+
+#text-checker__selected-text::-webkit-scrollbar {
+  width: 10px;
+}
+
+#text-checker__selected-text::-webkit-scrollbar-track {
+  border-left: 1px solid #2f3336;
+  border-radius: 0 8px 8px 0;
+  background: #16181c;
+}
+
+#text-checker__selected-text::-webkit-scrollbar-thumb {
+  border: 2px solid #16181c;
+  border-radius: 9999px;
+  background: #71767b;
+}
+
+#text-checker__selected-text::-webkit-scrollbar-thumb:hover {
+  background: #e7e9ea;
 }
 
 #text-checker__selected-text:focus {

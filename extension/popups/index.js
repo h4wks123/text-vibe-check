@@ -58,7 +58,7 @@ function enablePagePicker() {
 
     const element = event.target;
     const text = (element.innerText || element.textContent || "").trim();
-    const validText = text && text.length < 1000;
+    const validText = text && text.length <= 1000;
 
     document.removeEventListener("mouseover", handleMouseOver, true);
     document.removeEventListener("click", handleClick, true);
@@ -75,7 +75,7 @@ function enablePagePicker() {
     const toast = document.createElement("div");
     toast.textContent = validText
       ? "Text captured. Reopen the extension to view it."
-      : "No text found or text must be less than 1000 characters.";
+      : "No text found or text must be less than or equal to 1000 characters.";
     toast.style.cssText = [
       "position:fixed",
       "z-index:2147483647",
