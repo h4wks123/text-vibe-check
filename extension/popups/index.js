@@ -97,6 +97,13 @@ function enablePagePicker() {
   document.addEventListener("click", handleClick, true);
 }
 
+selectedText.addEventListener("input", () => {
+  chrome.runtime.sendMessage({
+    type: "text-checker-selected-text",
+    text: selectedText.value,
+  });
+});
+
 showSavedText();
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local" && changes.selectedText) {
