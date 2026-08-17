@@ -1,0 +1,14 @@
+{
+  "name": "Text Checker",
+  "description": "Select text from any webpage for analysis.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_popup": "popups/index.html",
+    "default_icon": "images/text_checker.jpg"
+  },
+  "background": {
+    "service_worker": "scripts/background.js"
+  }
+}

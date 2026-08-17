@@ -1,0 +1,80 @@
+/* Text Checker block */
+#text-checker {
+  box-sizing: border-box;
+  width: 340px;
+  margin: 0;
+  padding: 20px;
+  color: #e7e9ea;
+  background: #000000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+#text-checker__title {
+  margin: 0 0 20px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+#text-checker__pick-button {
+  width: 100%;
+  border: 1px solid #ffffff;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  color: #000000;
+  background: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+#text-checker__pick-button:hover {
+  color: #ffffff;
+  background: #000000;
+}
+
+#text-checker__pick-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+#text-checker__status {
+  min-height: 34px;
+  margin: 14px 0 18px;
+  color: #71767b;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+#text-checker__selected-text-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #e7e9ea;
+  font-weight: 700;
+}
+
+#text-checker__selected-text {
+  box-sizing: border-box;
+  width: 100%;
+  height: 120px;
+  border: 1px solid #2f3336;
+  border-radius: 8px;
+  padding: 10px;
+  color: #e7e9ea;
+  background: #16181c;
+  font: inherit;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+#text-checker__selected-text::placeholder {
+  color: #71767b;
+}
+
+#text-checker__selected-text:focus {
+  border-color: #ffffff;
+  outline: none;
+}
