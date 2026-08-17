@@ -48,7 +48,7 @@ function enablePagePicker() {
     restoreHighlight();
     highlightedElement = element;
     previousOutline = element.style.outline;
-    element.style.outline = "2px solid #1a73e8";
+    element.style.outline = "1px solid #e7e9ea";
   };
 
   const handleClick = (event) => {
