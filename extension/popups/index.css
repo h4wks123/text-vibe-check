@@ -1,4 +1,14 @@
-/* Text Checker block */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
 #text-checker {
   box-sizing: border-box;
   width: 340px;
@@ -21,7 +31,7 @@
 }
 
 #text-checker__pick-button,
-#text-checker__send-button {
+#text-checker__submit-button {
   width: 100%;
   border: 1px solid #ffffff;
   border-radius: 9999px;
@@ -37,7 +47,7 @@
 }
 
 #text-checker__pick-button:hover,
-#text-checker__send-button:hover {
+#text-checker__submit-button:hover {
   color: #ffffff;
   background: #000000;
 }
@@ -105,4 +115,11 @@
 #text-checker__selected-text:focus {
   border-color: #ffffff;
   outline: none;
+}
+
+#text-checker__is-valid {
+  margin: 14px 0 0;
+  color: #d9544d;
+  font-size: 13px;
+  line-height: 1.4;
 }

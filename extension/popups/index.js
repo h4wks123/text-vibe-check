@@ -1,12 +1,22 @@
-const pickButton = document.getElementById("text-checker__pick-button");
-const status = document.getElementById("text-checker__status");
 const selectedText = document.getElementById("text-checker__selected-text");
+const pickButton = document.getElementById("text-checker__pick-button");
+const submitButton = document.getElementById("text-checker__submit-button");
+const textIsValid = document.getElementById("text-checker__is-valid");
+const status = document.getElementById("text-checker__status");
+textIsValid.style.display = "none";
 
 function showSavedText() {
   chrome.storage.local.get({ selectedText: "" }, (data) => {
     selectedText.value = data.selectedText;
   });
 }
+
+selectedText.addEventListener("input", () => {
+  chrome.runtime.sendMessage({
+    type: "text-checker-selected-text",
+    text: selectedText.value,
+  });
+});
 
 pickButton.addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -25,6 +35,22 @@ pickButton.addEventListener("click", async () => {
     console.error(error);
     status.textContent = "This page does not allow extensions to select text.";
   }
+});
+
+submitButton.addEventListener("click", async () => {
+  const data = await chrome.storage.local.get({
+    selectedText: "",
+  });
+  const text = data.selectedText.trim();
+  const validText = text && text.length <= 1000;
+
+  if (!validText) {
+    textIsValid.style.display = "block";
+    return;
+  }
+
+  textIsValid.style.display = "none";
+  console.log(text);
 });
 
 function enablePagePicker() {
@@ -72,37 +98,37 @@ function enablePagePicker() {
       });
     }
 
-    const toast = document.createElement("div");
-    toast.textContent = validText
-      ? "Text captured. Reopen the extension to view it."
-      : "No text found or text must be less than or equal to 1000 characters.";
-    toast.style.cssText = [
-      "position:fixed",
-      "z-index:2147483647",
-      "top:16px",
-      "right:16px",
-      "padding:10px 14px",
-      "border-radius:6px",
-      "background:#000000",
-      "color:#e7e9ea",
-      "font:14px sans-serif",
-      "border: 1px solid #e7e9ea",
-      "border-radius: 10px",
-    ].join(";");
-    document.documentElement.appendChild(toast);
-    setTimeout(() => toast.remove(), 2500);
+    toasterValidText(validText);
   };
 
   document.addEventListener("mouseover", handleMouseOver, true);
   document.addEventListener("click", handleClick, true);
 }
 
-selectedText.addEventListener("input", () => {
-  chrome.runtime.sendMessage({
-    type: "text-checker-selected-text",
-    text: selectedText.value,
-  });
-});
+function toasterValidText(isValid) {
+  const toast = document.createElement("div");
+
+  toast.textContent = isValid
+    ? "Text captured. Reopen the extension to view it."
+    : "No text found or text must be less than or equal to 1000 characters.";
+  toast.style.cssText = [
+    "position:fixed",
+    "z-index:2147483647",
+    "top:16px",
+    "right:16px",
+    "padding:10px 14px",
+    "border-radius:6px",
+    "background:#000000",
+    "color:#e7e9ea",
+    "font:14px sans-serif",
+    "border: 1px solid #e7e9ea",
+    "border-radius: 10px",
+  ].join(";");
+
+  document.documentElement.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 2500);
+}
 
 showSavedText();
 chrome.storage.onChanged.addListener((changes, areaName) => {
