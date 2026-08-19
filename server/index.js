@@ -23,14 +23,63 @@ const server = http.createServer((req, res) => {
       body += chunk.toString();
     });
 
-    req.on("end", () => {
-      res.writeHead(201, headers);
-      res.end(
-        JSON.stringify({
-          message: "Data received successfully!",
-          received: JSON.parse(body || "{}"),
-        }),
-      );
+    req.on("end", async () => {
+      try {
+        const data = await fetch(
+          "https://openrouter.ai/api/v1/chat/completions",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${process.env.OPENROUTER_API}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "Qwen/Qwen3.8-27B:floor",
+              max_tokens: 1000,
+              messages: [
+                {
+                  role: "user",
+                  content: body,
+                },
+              ],
+              response_format: {
+                type: "json_schema",
+                json_schema: {
+                  name: "rating",
+                  strict: true,
+                  schema: {
+                    type: "object",
+                    properties: {
+                      vibe_rating: {
+                        type: "number",
+                        description:
+                          "From a scale of 1 to 100 percent, how likely do you think the content is AI generated? Respond with only a number.",
+                      },
+                    },
+                  },
+                  required: ["vibe_rating"],
+                  additionalProperties: false,
+                },
+              },
+            }),
+          },
+        );
+
+        const jsonResponse = await data.json();
+        console.log(jsonResponse);
+
+        res.writeHead(201, headers);
+        res.end(
+          JSON.stringify({
+            message: "Data received successfully!",
+            received: jsonResponse,
+          }),
+        );
+      } catch (error) {
+        console.error(error);
+        res.writeHead(500, headers);
+        res.end(JSON.stringify({ error: error.message }));
+      }
     });
   }
 });
