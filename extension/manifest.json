@@ -4,6 +4,7 @@
   "version": "1.0",
   "manifest_version": 3,
   "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://localhost:3000/*"],
   "action": {
     "default_popup": "popups/index.html",
     "default_icon": "images/text_checker.jpg"

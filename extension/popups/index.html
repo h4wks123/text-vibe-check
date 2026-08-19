@@ -23,6 +23,11 @@
       placeholder="Your selected text will appear here..."
     ></textarea>
     <button id="text-checker__submit-button" type="button">Submit</button>
+    <div id="text-checker__loader" role="status" aria-label="Analyzing text">
+      <span aria-hidden="true"></span>
+      <span>Analyzing...</span>
+    </div>
+    <p id="text-checker__result" role="status"></p>
     <p id="text-checker__is-valid">
       Text must not be empty or have less than or equal to 1000 characters
     </p>

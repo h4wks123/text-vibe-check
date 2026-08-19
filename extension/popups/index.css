@@ -123,3 +123,40 @@
   font-size: 13px;
   line-height: 1.4;
 }
+
+#text-checker__result {
+  margin: 14px 0 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+#text-checker__loader {
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  color: #71767b;
+  font-size: 13px;
+}
+
+#text-checker__loader span:first-child {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #2f3336;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: text-checker-spin 700ms linear infinite;
+}
+
+#text-checker__submit-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+@keyframes text-checker-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

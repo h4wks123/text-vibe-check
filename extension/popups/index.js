@@ -3,7 +3,29 @@ const pickButton = document.getElementById("text-checker__pick-button");
 const submitButton = document.getElementById("text-checker__submit-button");
 const textIsValid = document.getElementById("text-checker__is-valid");
 const status = document.getElementById("text-checker__status");
+const loader = document.getElementById("text-checker__loader");
+const resultMessage = document.getElementById("text-checker__result");
+const ANALYSIS_STATE_KEY = "textCheckerAnalysis";
 textIsValid.style.display = "none";
+
+function renderAnalysisState(state) {
+  const isLoading = state?.status === "loading";
+
+  loader.style.display = isLoading ? "flex" : "none";
+  submitButton.disabled = isLoading;
+
+  if (state?.status === "success") {
+    resultMessage.textContent = `${state.vibe_rating}% likely AI-generated`;
+  } else if (state?.status === "error") {
+    resultMessage.textContent = state.error || "Unable to analyze the text.";
+  }
+}
+
+chrome.storage.local.get({ [ANALYSIS_STATE_KEY]: null }, (data) => {
+  renderAnalysisState(data[ANALYSIS_STATE_KEY]);
+});
+
+chrome.runtime.sendMessage({ type: "text-checker-resume-analysis" });
 
 function showSavedText() {
   chrome.storage.local.get({ selectedText: "" }, (data) => {
@@ -50,18 +72,14 @@ submitButton.addEventListener("click", async () => {
   }
 
   textIsValid.style.display = "none";
+  resultMessage.textContent = "";
+  loader.style.display = "flex";
+  submitButton.disabled = true;
 
-  try {
-    const data = await fetch("http://localhost:3000/text", {
-      method: "POST",
-      body: JSON.stringify(text),
-    });
-    const result = await data.json();
-
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
+  chrome.runtime.sendMessage({
+    type: "text-checker-analyze-text",
+    text,
+  });
 });
 
 function enablePagePicker() {
@@ -143,7 +161,13 @@ function toasterValidText(isValid) {
 
 showSavedText();
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes.selectedText) {
+  if (areaName !== "local") return;
+
+  if (changes.selectedText) {
     selectedText.value = changes.selectedText.newValue || "";
+  }
+
+  if (changes[ANALYSIS_STATE_KEY]) {
+    renderAnalysisState(changes[ANALYSIS_STATE_KEY].newValue);
   }
 });

@@ -1,5 +1,18 @@
 const http = require("http");
 
+function getRating(openRouterResponse) {
+  const content = openRouterResponse?.choices?.[0]?.message?.content;
+  const parsedContent =
+    typeof content === "string" ? JSON.parse(content) : content;
+  const rating = parsedContent?.vibe_rating;
+
+  if (!Number.isInteger(rating) || rating < 1 || rating > 100) {
+    throw new Error("The model returned a rating outside the 1-100 range.");
+  }
+
+  return rating;
+}
+
 const server = http.createServer((req, res) => {
   const headers = {
     "Access-Control-Allow-Origin": process.env.CHROME_URL,
@@ -38,6 +51,11 @@ const server = http.createServer((req, res) => {
               max_tokens: 1000,
               messages: [
                 {
+                  role: "system",
+                  content:
+                    "Return the AI-generated likelihood as one integer percentage from 1 to 100. Do not use a 0-1 probability or a 1-5 rating.",
+                },
+                {
                   role: "user",
                   content: body,
                 },
@@ -51,9 +69,11 @@ const server = http.createServer((req, res) => {
                     type: "object",
                     properties: {
                       vibe_rating: {
-                        type: "number",
+                        type: "integer",
+                        minimum: 1,
+                        maximum: 100,
                         description:
-                          "From a scale of 1 to 100 percent, how likely do you think the content is AI generated? Respond with only a number.",
+                          "An integer percentage from 1 to 100 representing how likely the content is AI-generated.",
                       },
                     },
                   },
@@ -67,17 +87,17 @@ const server = http.createServer((req, res) => {
 
         const jsonResponse = await data.json();
         console.log(jsonResponse);
+        const rating = getRating(jsonResponse);
 
-        res.writeHead(201, headers);
+        res.writeHead(200, { ...headers, "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
-            message: "Data received successfully!",
-            received: jsonResponse,
+            vibe_rating: rating,
           }),
         );
       } catch (error) {
         console.error(error);
-        res.writeHead(500, headers);
+        res.writeHead(502, { ...headers, "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: error.message }));
       }
     });
