@@ -94,4 +94,4 @@ The server validates that the returned score is an integer between `1` and `100`
 
 ## Contributors
 
-- **Codex:** Generating most parts of this `README.md` and for auditing my (terrible) javascript code for some oversight in bugs. 
+- **Codex:** Generating most parts of this `README.md` and for auditing my (terrible) javascript code in case of some oversight in bugs. 
