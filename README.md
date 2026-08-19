@@ -1,17 +1,8 @@
 # Text Vibe Check
 
-Text Vibe Check is a Chrome extension that lets you select text from any webpage and estimate how likely it is to be AI-generated.
+Text Vibe Check is a Chrome extension that lets you select text from any webpage and estimate how likely it is to be AI-generated. The extension sends the selected text to a local Node.js server. The server calls OpenRouter and returns an integer score from `1` to `100`, which the extension displays as a percentage.
 
-The extension sends the selected text to a local Node.js server. The server calls OpenRouter and returns an integer score from `1` to `100`, which the extension displays as a percentage.
-
-## Project structure
-
-- `extension/` — Chrome Manifest V3 extension
-- `extension/popups/` — extension popup UI
-- `extension/scripts/background.js` — persistent text analysis request and state management
-- `server/` — local HTTP server and OpenRouter integration
-
-The background service worker stores the selected text and analysis state in Chrome storage. This allows an analysis to continue when the popup is closed and lets the popup restore the loader or result when it is reopened.
+Disclaimer: Honestly I just did this project for fun and as a way for me to learn the chrome extension ecosystem from development and AI (OpenRouter) integration to testing the feature locally. I personally feel like there is no true way to determine how AI generated a content is with 100% certainty for all use cases, and there are plenty of outliers that needs to be considered in order for a (serious) project similar to mine to be very feasible. Nevertheless, this will hopefully pave way towards a bigger project I currently have in mind if I ever feel like implementing it in the near future. However, I do not discourage anyone from using my chrome extension, and as outlined in the prerequisites you can run this project locally and do some fun stuff I guess :) 
 
 ## Prerequisites
 
@@ -100,3 +91,7 @@ The server validates that the returned score is an integer between `1` and `100`
 - **No response from the server:** Confirm the server is running on port `3000` and that `OPENROUTER_API` is valid.
 - **Extension changes are not visible:** Return to `chrome://extensions` and click the extension’s reload button.
 - **The score is not a scientific probability:** The percentage is an AI-generated heuristic score, not a calibrated or guaranteed detection probability.
+
+## Contributors
+
+- **Codex:** Generating most parts of this `README.md` and for auditing my (terrible) javascript code for some oversight in bugs. 
