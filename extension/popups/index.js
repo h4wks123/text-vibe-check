@@ -89,6 +89,29 @@ function enablePagePicker() {
   let highlightedElement = null;
   let previousOutline = "";
 
+  const showToast = (isValid) => {
+    const toast = document.createElement("div");
+
+    toast.textContent = isValid
+      ? "Text captured. Reopen the extension to view it."
+      : "No text found or text must be less than or equal to 1000 characters.";
+    toast.style.cssText = [
+      "position:fixed",
+      "z-index:2147483647",
+      "top:16px",
+      "right:16px",
+      "padding:10px 14px",
+      "border-radius:10px",
+      "background:#000000",
+      "color:#e7e9ea",
+      "font:14px sans-serif",
+      "border:1px solid #e7e9ea",
+    ].join(";");
+
+    document.documentElement.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+  };
+
   const restoreHighlight = () => {
     if (highlightedElement) {
       highlightedElement.style.outline = previousOutline;
@@ -127,36 +150,11 @@ function enablePagePicker() {
       });
     }
 
-    toasterValidText(validText);
+    showToast(validText);
   };
 
   document.addEventListener("mouseover", handleMouseOver, true);
   document.addEventListener("click", handleClick, true);
-}
-
-function toasterValidText(isValid) {
-  const toast = document.createElement("div");
-
-  toast.textContent = isValid
-    ? "Text captured. Reopen the extension to view it."
-    : "No text found or text must be less than or equal to 1000 characters.";
-  toast.style.cssText = [
-    "position:fixed",
-    "z-index:2147483647",
-    "top:16px",
-    "right:16px",
-    "padding:10px 14px",
-    "border-radius:6px",
-    "background:#000000",
-    "color:#e7e9ea",
-    "font:14px sans-serif",
-    "border: 1px solid #e7e9ea",
-    "border-radius: 10px",
-  ].join(";");
-
-  document.documentElement.appendChild(toast);
-
-  setTimeout(() => toast.remove(), 2500);
 }
 
 showSavedText();
